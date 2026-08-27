@@ -6,7 +6,7 @@
 > **DISCLAIMER:** This software is provided strictly for **educational and academic research purposes**. The code contains a built-in safety prompt warning the user before execution. However, if this warning dialog is bypassed or removed, the persistence module will execute silently and autonomously in the background, which poses severe risks to system integrity. 
 > 
 > * **Execution Environment:** Run this software **exclusively within isolated virtualized test environments** (e.g., air-gapped virtual machines).
-> * **Kill Switch & Script Kiddie Advisory:** A kill switch mechanism is embedded within the source file. To any novice or unauthorized operator attempting deployment: 
+> * **Kill Switch & Script Kiddie Advisory:** A kill switch mechanisms (two of them) were embedded within the source file. To any novice or unauthorized operator attempting deployment: 
 >   ```text
 >   35 0ur 5cr1pt k1dd13, d0 n0t 4tt3mpt t0 r3l3453 0r 3x3cut3 th15 c0d3 w1th0ut full und3r5t4nd1ng.
 >   ```
