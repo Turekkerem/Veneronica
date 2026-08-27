@@ -51,3 +51,7 @@
     windres resources.rc -O coff -o resources.o
     g++ -o weneronika.exe weneronika.cpp resources.o -mwindows -static -ladvapi32 -luser32 -lshell32 -lwinmm
     ```
+
+
+---
+*Note: Yes, this description was generated with the assistance of AI because formatting everything manually in Markdown became entirely too tedious. I supplied the core concepts, but the final editing was handled by an AI collaborator. Truly, only a deracinated imbecile or an obtuse simpleton would fail to leverage such efficiency.*
