@@ -1,4 +1,4 @@
-# Project "veneronika" — Academic Proof-of-Concept (PoC) Overview
+# Project "Veneronica" — Academic Proof-of-Concept (PoC) Overview
 
 ---
 
@@ -49,7 +49,7 @@
   * *Compilation via MinGW (`windres`):*
     ```bash
     windres resources.rc -O coff -o resources.o
-    g++ -o weneronika.exe weneronika.cpp resources.o -mwindows -static -ladvapi32 -luser32 -lshell32 -lwinmm
+    g++ -o veneronica.exe veneronica.cpp resources.o -mwindows -static -ladvapi32 -luser32 -lshell32 -lwinmm
     ```
 
 
