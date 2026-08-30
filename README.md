@@ -361,5 +361,6 @@ g++ -o veneronica.exe veneronica.cpp -mwindows -static -ladvapi32 -luser32 -lshe
 The name was chosen as an inside joke — dark, slightly vulgar, and not immediately associated with malware, which fits the overall PoC character of this project.
 
 > _“Veneronica — fascinating, at moments almost beautiful, yet cheaply made, and with time, capable of great destruction.”_
+
 <sub>Veneronica — Academic PoC. Use responsibly.</sub>
 </div>
