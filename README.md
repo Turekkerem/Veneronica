@@ -1,6 +1,6 @@
 # Veneronica — Academic Proof-of-Concept Malware
 
-<div style="border: 2px solid red; padding: 10px; background-color: #ffeeee; font-weight: bold; color: #990000;">
+<div style="background-color:#1e1e1e; color:#ff5555; border:2px solid #ff0000; padding:15px; border-radius:8px; font-family: 'Consolas', monospace;">
 
 **WARNING — EDUCATIONAL USE ONLY**  
 This software is a **malware proof-of-concept** created for academic research and security training.  
@@ -8,6 +8,8 @@ It deliberately weakens system security, installs persistence, manipulates file 
 **DO NOT RUN THIS ON ANY PRODUCTION OR NETWORKED MACHINE.**  
 Use only in an isolated virtual machine with no network access and no valuable data.  
 The author assumes no liability for any damage caused by misuse.
+
+**5cr1p7 k1dd13 w4rn1ng:** 1f y0u d0 n07 fully und3r574nd wh47 7h15 c0d3 d035, d0 n07 u53 17. 7h15 15 n07 4 700l f0r 3v3ry0n3.
 
 </div>
 
