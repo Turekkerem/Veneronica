@@ -1,14 +1,13 @@
 # Veneronica — Academic Proof-of-Concept Malware
 
-<div style="background-color:#1e1e1e; color:#ff5555; border:2px solid #ff0000; padding:15px; border-radius:8px; font-family: 'Consolas', monospace;">
+<div style="background-color:#1a1a1a; color:#b0b0b0; padding:15px; border-left:4px solid #8b0000; border-radius:4px; font-family:Consolas, monospace;">
 
 **WARNING — EDUCATIONAL USE ONLY**  
-This software is a **malware proof-of-concept** created for academic research and security training.  
+This software is a malware proof-of-concept created for academic research and security training.  
 It deliberately weakens system security, installs persistence, manipulates file metadata, and attempts privilege escalation.  
 **DO NOT RUN THIS ON ANY PRODUCTION OR NETWORKED MACHINE.**  
 Use only in an isolated virtual machine with no network access and no valuable data.  
 The author assumes no liability for any damage caused by misuse.
-
 **5cr1p7 k1dd13 w4rn1ng:** 1f y0u d0 n07 fully und3r574nd wh47 7h15 c0d3 d035, d0 n07 u53 17. 7h15 15 n07 4 700l f0r 3v3ry0n3.
 
 </div>
@@ -345,7 +344,35 @@ Compile the source with MinGW‑w64 or MSVC. The following command uses G++ and 
 ```
 g++ -o veneronica.exe veneronica.cpp -mwindows -static -ladvapi32 -luser32 -lshell32 -lwinmm -lole32 -luuid
 ```
+---
 
+## 9. Origin of the Name
+
+
+
+
+| Bogdan Boner (left) | Mężczyzna (right) |
+|----------------------|-------------------|
+| <span style="color:#3399ff;">**Bogdan Boner:** Dziewczyna, najtańsza jaką macie.</span> | |
+| | <span style="color:#ff6600;">**Mężczyzna:** Eee... jesteś pewien?</span> |
+| <span style="color:#3399ff;">**Bogdan Boner:** Jak sraczki po czereśniach.</span> | |
+| | <span style="color:#ff6600;">**Mężczyzna:** No nic. Nasz klient, nasz pan. Czyli Weneronika.</span> |
+| <span style="color:#3399ff;">**Bogdan Boner:** No dobra, to pisz pan adres. Dyktuję.</span> | |
+| | <span style="color:#ff6600;">**Mężczyzna:** Nie trzeba, znam. Przecież numer mi się wyświetlił.</span> |
+
+The name was chosen as an inside joke — dark, slightly vulgar, and not immediately associated with malware, which fits the overall PoC character of this project.
+
+<div style="background-color:#141414; border-left:6px solid #b8860b; padding:20px 25px; border-radius:8px; font-family:Georgia, 'Times New Roman', serif;">
+
+<p style="font-size:1.2em; font-style:italic; color:#e6d5a8; line-height:1.6;">
+
+“Veneronica — this is interesting, in some moments beautiful, but it is cheap, and in time it can be destructive.”
+
+</p>
+
+<p style="text-align:right; color:#8b7d5b; font-size:0.9em; letter-spacing:1px;"></p>
+
+</div>
 <div align="center">
 <sub>Veneronica — Academic PoC. Use responsibly.</sub>
 </div>
