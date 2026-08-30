@@ -366,7 +366,7 @@ The name was chosen as an inside joke — dark, slightly vulgar, and not immedia
 
 <p style="font-size:1.2em; font-style:italic; color:#e6d5a8; line-height:1.6;">
 
-“Veneronica — this is interesting, in some moments beautiful, but it is cheap, and in time it can be destructive.”
+“Veneronica — fascinating, at moments almost beautiful, yet cheaply made, and with time, capable of great destruction.”
 
 </p>
 
