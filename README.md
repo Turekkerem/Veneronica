@@ -66,7 +66,7 @@ The goal of this module is to change the file hash of the executable after every
 3. Opens the temporary copy with read/write access.
 4. Allocates a buffer and reads the whole file into memory.
 5. Searches for the marker `"POLYMORPHIC01"` (13 bytes) by scanning the entire file.
-   -The marker is **built dynamically** character by character inside the function, so the literal string `"POLYMORPHIC01"` appears only as part of the global `PolymorphicData` structure in the data section, and not as a separate duplicate in the code section. This reduces the chance of finding multiple occurrences during the scan.
+   - The marker is **built dynamically** character by character inside the function, so the literal string `"POLYMORPHIC01"` appears only as part of the global `PolymorphicData` structure in the data section, and not as a separate duplicate in the code section. This reduces the chance of finding multiple occurrences during the scan.
 6. Once found, the function treats the memory immediately after the marker (`found + markerLen`) as an array of 1000 integers.
 7. Fills that array with cryptographically random bytes using `CryptGenRandom` (or `rand()` as fallback).
 8. Writes the modified buffer back to the `.tmp` file.
