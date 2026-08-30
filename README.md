@@ -349,20 +349,18 @@ g++ -o veneronica.exe veneronica.cpp -mwindows -static -ladvapi32 -luser32 -lshe
 
 ## 9. Origin of the Name
 
-| Bogdan Boner | Mężczyzna (Telefon) |
-| :--- | :--- |
-| **Bogdan Boner:** Dziewczyna, najtańsza jaką macie. | |
-| | **Mężczyzna:** Eee... jesteś pewien? |
-| **Bogdan Boner:** Jak sraczki po czereśniach. | |
-| | **Mężczyzna:** No nic. Nasz klient, nasz pan. Czyli Weneronika. |
-| **Bogdan Boner:** No dobra, to pisz pan adres. Dyktuję. | |
-| | **Mężczyzna:** Nie trzeba, znam. Przecież numer mi się wyświetlił. |
+🧑🏼 **Bogdan Boner:** Dziewczyna, najtańsza jaką macie.
+  * 📞 **Mężczyzna:** Eee... jesteś pewien?
+
+🧑🏼 **Bogdan Boner:** Jak sraczki po czereśniach.
+  * 📞 **Mężczyzna:** No nic. Nasz klient, nasz pan. Czyli Weneronika.
+
+🧑🏼 **Bogdan Boner:** No dobra, to pisz pan adres. Dyktuję.
+  * 📞 **Mężczyzna:** Nie trzeba, znam. Przecież numer mi się wyświetlił.
 
 The name was chosen as an inside joke — dark, slightly vulgar, and not immediately associated with malware, which fits the overall PoC character of this project.
 
 > _“Veneronica — fascinating, at moments almost beautiful, yet cheaply made, and with time, capable of great destruction.”_
-
-</div>
 <div align="center">
 <sub>Veneronica — Academic PoC. Use responsibly.</sub>
 </div>
