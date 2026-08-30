@@ -319,7 +319,7 @@ The flag `Installed` is stored as a DWORD value under `HKEY_CURRENT_USER\Softwar
 | Feature | Implementation |
 |---------|----------------|
 | **Polymorphism** | Self‑copy to `.tmp`, search for marker, randomise data, replace on reboot. |
-| **Persistence (user)** | 10 methods incl. null‑terminated Run, screensaver, IFEO, App Paths, protocol handler. |
+| **Persistence (user)** | 9 methods incl. null‑terminated Run, screensaver, IFEO, App Paths, protocol handler. |
 | **Persistence (admin)** | 9 methods incl. service, Shell replacement, BootExecute, AppInit_DLLs. |
 | **Downgrade** | Over 90 unique registry modifications across 5 categories. |
 | **Timestomp** | Random timestamps in user directories, depth/limit capped. |
