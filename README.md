@@ -349,29 +349,27 @@ g++ -o veneronica.exe veneronica.cpp -mwindows -static -ladvapi32 -luser32 -lshe
 
 ## 9. Origin of the Name
 
+**Bogdan Boner:** Dziewczyna, najtańsza jaką macie.
 
+<div align="right">
+<b>Mężczyzna:</b> Eee... jesteś pewien?
+</div>
 
+**Bogdan Boner:** Jak sraczki po czereśniach.
 
-| Bogdan Boner (left) | Mężczyzna (right) |
-|----------------------|-------------------|
-| <span style="color:#3399ff;">**Bogdan Boner:** Dziewczyna, najtańsza jaką macie.</span> | |
-| | <span style="color:#ff6600;">**Mężczyzna:** Eee... jesteś pewien?</span> |
-| <span style="color:#3399ff;">**Bogdan Boner:** Jak sraczki po czereśniach.</span> | |
-| | <span style="color:#ff6600;">**Mężczyzna:** No nic. Nasz klient, nasz pan. Czyli Weneronika.</span> |
-| <span style="color:#3399ff;">**Bogdan Boner:** No dobra, to pisz pan adres. Dyktuję.</span> | |
-| | <span style="color:#ff6600;">**Mężczyzna:** Nie trzeba, znam. Przecież numer mi się wyświetlił.</span> |
+<div align="right">
+<b>Mężczyzna:</b> No nic. Nasz klient, nasz pan. Czyli Weneronika.
+</div>
+
+**Bogdan Boner:** No dobra, to pisz pan adres. Dyktuję.
+
+<div align="right">
+<b>Mężczyzna:</b> Nie trzeba, znam. Przecież numer mi się wyświetlił.
+</div>
 
 The name was chosen as an inside joke — dark, slightly vulgar, and not immediately associated with malware, which fits the overall PoC character of this project.
 
-<div style="background-color:#141414; border-left:6px solid #b8860b; padding:20px 25px; border-radius:8px; font-family:Georgia, 'Times New Roman', serif;">
-
-<p style="font-size:1.2em; font-style:italic; color:#e6d5a8; line-height:1.6;">
-
-“Veneronica — fascinating, at moments almost beautiful, yet cheaply made, and with time, capable of great destruction.”
-
-</p>
-
-<p style="text-align:right; color:#8b7d5b; font-size:0.9em; letter-spacing:1px;"></p>
+> _“Veneronica — fascinating, at moments almost beautiful, yet cheaply made, and with time, capable of great destruction.”_
 
 </div>
 <div align="center">
