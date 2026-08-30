@@ -66,7 +66,7 @@ The goal of this module is to change the file hash of the executable after every
 3. Opens the temporary copy with read/write access.
 4. Allocates a buffer and reads the whole file into memory.
 5. Searches for the marker `"POLYMORPHIC01"` (13 bytes) by scanning the entire file.
-   - The marker is **built dynamically** character by character to avoid a second literal occurrence in `.rdata` (which would confuse the scan).
+   -The marker is **built dynamically** character by character inside the function, so the literal string `"POLYMORPHIC01"` appears only as part of the global `PolymorphicData` structure in the data section, and not as a separate duplicate in the code section. This reduces the chance of finding multiple occurrences during the scan.
 6. Once found, the function treats the memory immediately after the marker (`found + markerLen`) as an array of 1000 integers.
 7. Fills that array with cryptographically random bytes using `CryptGenRandom` (or `rand()` as fallback).
 8. Writes the modified buffer back to the `.tmp` file.
@@ -98,8 +98,7 @@ This module ensures the malware survives reboots by registering itself in variou
 | 6 | **IFEO (user)** | Uses Image File Execution Options under HKCU to set the malware as the debugger for `notepad.exe`. Whenever Notepad is launched, the malware runs instead. |
 | 7 | **App Paths** | Hijacks the `winword.exe` application path under `HKCU\...\App Paths` so that launching Word triggers the malware. |
 | 8 | **Protocol handler** | Creates a custom URL protocol (`myapp:`) that executes the malware when invoked from a browser or other application. |
-| 9 | **DLL search order** | Abuses `HKCU\...\Explorer\Shell Folders\Startup` to redirect startup folder path (somewhat artificial, but demonstrates DLL/path manipulation). |
-| 10 | **Scheduled Task (user)** | Uses `schtasks` command to create a task that runs the malware at user logon. |
+| 9 | **Scheduled Task (user)** | Uses `schtasks` command to create a task that runs the malware at user logon. |
 
 #### 3.2.2 Administrator‑level methods
 
@@ -116,7 +115,7 @@ This module ensures the malware survives reboots by registering itself in variou
 | 9 | **Image hijack** | Copies the malware over `notepad.exe` in `System32`. This is a crude but effective way to replace a legitimate binary. |
 
 **Random selection:**  
-The function uses `rand() % 9` (admin) or `rand() % 10` (user) to pick one method. In a real attack, an actor might prefer one method over another, but randomisation makes analysis less predictable.
+The function uses `rand() % 9` to pick one method. In a real attack, an actor might prefer one method over another, but randomisation makes analysis less predictable.
 
 ---
 
