@@ -360,7 +360,7 @@ g++ -o veneronica.exe veneronica.cpp -mwindows -static -ladvapi32 -luser32 -lshe
 
 The name was chosen as an inside joke — dark, slightly vulgar, and not immediately associated with malware, which fits the overall PoC character of this project.
 
-> _“Veneronica — a quick thrill born from cheap intentions. You don't pay for her upfront, and you never pay her with money, but in time, the toll of her actions is devastating.”_
+> _“Veneronica — an illusion of fleeting thrills. Do not call her affordable; you pay her almost nothing in money, yet her actions will ultimately cost you everything else.”_
 
 <sub>Veneronica — Academic PoC. Use responsibly.</sub>
 </div>
