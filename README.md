@@ -420,7 +420,7 @@ g++ -o veneronica.exe veneronica.cpp -mwindows -static -ladvapi32 -luser32 -lshe
 | **Bogdan Boner:** Dziewczyna, najtańsza jaką macie. | |
 | | **Mężczyzna:** Eee... jesteś pewien? |
 | **Bogdan Boner:** Jak sraczki po czereśniach. | |
-| | **Mężczyzna:** No nic. Nasz klient, nasz pan. Czyli Weneronika. |
+| | **Mężczyzna:** No nic. Nasz klient, nasz pan. Czyli **Weneronika.** |
 | **Bogdan Boner:** No dobra, to pisz pan adres. Dyktuję. | |
 | | **Mężczyzna:** Nie trzeba, znam. Przecież numer mi się wyświetlił. |
 
