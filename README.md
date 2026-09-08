@@ -263,6 +263,70 @@ When passed to `RegSetValueExW`, the full length (`(hidden.size() + 1) * sizeof(
 
 ---
 
+### 3.8 USB Propagation (Honeypot Module)
+
+Veneronica includes a module that enables automatic propagation to removable drives, often referred to as a "USB honeypot" or "worm" component. The purpose is to spread the malware to other machines when an infected USB drive is inserted into them, relying on social engineering to trick the victim into executing the malicious payload.
+
+#### 3.8.1 How It Works
+
+The propagation mechanism is implemented in three main parts:
+
+1. **Background monitoring thread** (`MonitorThread`)  
+   - Launched at the very beginning of the malware execution by `StartHoneypot()`.
+   - Runs in a detached thread, independent of the main infection flow.
+   - Every **2 seconds** it calls `GetLogicalDrives()` to enumerate all currently available drive letters.
+   - For each drive, it checks the type using `GetDriveTypeW()` and filters only **removable drives** (`DRIVE_REMOVABLE`).
+   - It maintains a set of currently mounted removable drives (`currentlyMounted`) to detect **newly inserted** media. Only when a drive appears for the first time does it spawn a worker thread to process that drive.
+
+2. **Drive processing** (`ProcessDrive(const std::wstring& driveRoot)`)  
+   - Creates a hidden directory on the removable drive: `<driveRoot>\$Windows.~WS`.  
+     If the directory already exists, it continues; otherwise it returns if creation fails.
+   - Sets the directory attributes to **HIDDEN** and **SYSTEM**, making it less visible in Windows Explorer with default settings.
+   - Copies the running malware executable (`selfPath`) into this hidden folder. The destination filename is randomly chosen from a list of **12 system‑like names** (e.g., `winlog.exe`, `svchost.exe`, `issas.exe`, etc.). These names are deliberately similar to legitimate Windows system processes to avoid raising suspicion.
+   - After the copy is placed in the hidden folder, the malware creates a **shortcut** (`.lnk`) in the **root directory** of the removable drive. The shortcut’s name is generated from a set of **20 templates**, each resembling a common business or personal document (e.g., payroll summaries, meeting minutes, VPN guides, quarterly reports, etc.).  
+     The placeholders `{month}` and `{year}` are replaced with the current month name and year using the `FormatFileName` function.  
+     > **Note:** Some templates may contain additional placeholders (such as `{quarter}`) that are not replaced in the current implementation, leaving the literal placeholder text in the filename.
+
+3. **Shortcut creation** (`CreateShortcut`)  
+   - Uses the COM interfaces `IShellLinkW` and `IPersistFile` to create a Windows shortcut.
+   - The shortcut’s target path is set to the copied malware file inside the hidden folder.
+   - **Critical detail:** the shortcut includes the argument `--n` in its target command line. When the victim later double‑clicks the shortcut, the malware is launched with this flag - it means that it doesn't show up UAC.
+   - The working directory is incorrectly set to the full path of the target file, but this does not prevent the shortcut from executing the target. The icon is set to `shell32.dll,1` (a generic system icon) to avoid looking suspicious.
+
+#### 3.8.2 Behaviour on the Victim Machine
+
+When the infected USB drive is inserted into a clean computer and the victim double‑clicks the malicious shortcut in the drive’s root:
+
+- The malware is executed with the `--n` command‑line argument.
+- In the `WinMain` function, the code checks for this flag and **skips the UAC elevation attempt** (`ElevateSelf`). This means the malware runs **without trying to gain administrator privileges**, presumably to avoid raising suspicion.
+- The `hasNFlag` variable is set to `true`, so the initial `if(!hasNFlag)` block is bypassed. The malware proceeds directly to `MakePolymorphic()`, `StartHoneypot()`, and then to the installation routine.
+- If the `Installed` flag is **not set** on this new machine (which is the case on first infection), it will attempt to install persistence using only **user‑level** methods, because `IsElevated()` will return false (no admin rights). This means it will select one of the nine user‑level persistence methods and perform user‑level timestomping and shortcut hijacking on the desktop.
+- After this, it sets the `Installed` flag and enters the infinite wait loop (`WaitForSingleObject`), keeping the process alive so that the USB monitoring thread continues to run and can propagate to any other USB drives inserted later.
+
+In summary, the USB propagation module ensures that:
+- The malware silently copies itself to any newly inserted removable drive.
+- It creates a realistic‑looking shortcut that points to the hidden copy.
+- The victim is tricked into executing the malware by clicking the shortcut, after which the infection cycle repeats on the new host.
+
+#### 3.8.3 Limitations and Observations
+
+- The module does **not** use the Windows AutoRun/AutoPlay feature, which has been largely disabled by default since Windows 7. Instead, it relies entirely on social engineering (the victim must manually open the USB drive and click the shortcut).
+- The hidden folder name `$Windows.~WS` mimics the legitimate `$Windows.~BT` and `$Windows.~WS` folders used during Windows upgrades, making it less suspicious to advanced users who might browse hidden files.
+- The filenames of the copied executable are intentionally misspelled versions of real system processes (e.g., `winlog.exe` instead of `winlogon.exe`), which can bypass simple detection rules based on exact filename matches.
+- The `rand()` function used for choosing the filename and shortcut template is not seeded in `ProcessDrive` itself, but it relies on the global `srand` call in `WinMain` (or the one in `InstallPersistenceRandom`), which is executed before the honeypot thread starts. This ensures some randomness, though not cryptographically secure.
+
+#### 3.8.4 Purpose in the PoC
+
+The USB propagation component demonstrates a classic worm‑like spreading mechanism. It highlights how malware can:
+- Monitor for new removable media.
+- Copy itself stealthily.
+- Use social engineering to induce execution.
+- Maintain a low profile by avoiding unnecessary privilege escalation when launched from the USB drive.
+
+This technique is often seen in real‑world threats such as **Conficker**, **Sality**, and **USB‑borne espionage tools**, making it a valuable addition to a comprehensive malware PoC.
+
+---
+
 ## 4. Installation Flag and Post‑Reboot Behaviour
 
 The flag `Installed` is stored as a DWORD value under `HKEY_CURRENT_USER\Software\MyMalware`.
