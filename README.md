@@ -390,7 +390,8 @@ The flag `Installed` is stored as a DWORD value under `HKEY_CURRENT_USER\Softwar
 | **Downgrade** | Over 90 unique registry modifications across 5 categories. |
 | **Timestomp** | Random timestamps in user directories, depth/limit capped. |
 | **Shortcut hijack** | COM‑based modification of all desktop `.lnk` files, preserving icons. |
-| **UAC elevation** | `ShellExecuteExW` with `runas`; user must accept. |
+| **USB propagation** | Monitors removable drives, copies self to hidden folder, creates deceptive shortcut with `--n` argument to spread without UAC. |
+| **UAC elevation** | `ShellExecuteExW` with `runas` |
 | **Install flag** | Prevents re‑installation; post‑reboot runs are silent. |
 | **Registry hiding** | Null‑terminated value names invisible in `regedit`. |
 
