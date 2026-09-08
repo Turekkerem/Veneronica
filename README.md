@@ -28,6 +28,7 @@ Veneronica is a multi-module malicious executable that demonstrates several tech
 - **Shortcut hijacking** — replacement of desktop `.lnk` targets to trick the victim into executing the malware.
 - **Privilege escalation** — attempts to obtain administrative rights via UAC prompt.
 - **Installation flag** — prevents repeated UAC prompts and controls post-reboot behaviour.
+- **Spreading via USB** - enables to copy itself from removable disk to host and vice-versa.
 
 > **Note:** The original source included a `ReplaceOriginalWithDecoy` function that overwrote the original executable with a fake text file. That function has been **removed** in this version and is **not described further**.
 
